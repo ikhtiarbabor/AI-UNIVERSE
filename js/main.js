@@ -1,10 +1,12 @@
 const loadData = async (dataLimit) => {
+  preLoader(true);
   const url = 'https://openapi.programming-hero.com/api/ai/tools';
   const res = await fetch(url);
   const data = await res.json();
   getAllData(data.data.tools, dataLimit);
 };
 const getAllData = (data, dataLimit) => {
+  preLoader(false);
   const featuresContainer = document.getElementById('features-container');
   const showMoreButton = document.getElementById('show-more-btn');
 
@@ -26,16 +28,24 @@ const getAllData = (data, dataLimit) => {
                 </ol>
                 <hr class="m-0"/>
               </div>
-              <div class="p-3">
-                <h4>${element.name}</h4>
-                <p>
-                    <i class="fa-regular fa-calendar-days"></i>
-                    <span>${element.published_in}</span>
-                </p>
+              <div class="p-3 row ">
+                <div class="col-md-7">
+                    <h4>${element.name}</h4>
+                    <p>
+                        <i class="fa-regular fa-calendar-days"></i>
+                        <span>${element.published_in}</span>
+                    </p>
+                </div>
+                <div class="col-md-5  text-end opacity-50" style="cursor:pointer;">
+                     <i
+                        class="fa-solid fa-arrow-right-long rounded-circle text-white p-2 bg-primary fs-3"
+                    ></i>
+                </div>
               </div>
             </div>
         `;
       featuresContainer.appendChild(feature);
+      preLoader(false);
     });
   };
   if (data.length > 6 && dataLimit === false) {
@@ -63,5 +73,14 @@ document.getElementById('show-less').addEventListener('click', function () {
   container.innerHTML = '';
   loadData(false);
 });
+// Pre Loader
+const preLoader = (loader) => {
+  const preloader = document.getElementById('preloader');
+  if (loader === true) {
+    preloader.classList.remove('d-none');
+  } else {
+    preloader.classList.add('d-none');
+  }
+};
 
 loadData(false);
