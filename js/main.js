@@ -12,6 +12,7 @@ const getAllData = (data, dataLimit) => {
 
   const eachData = (data) => {
     data.forEach((element) => {
+      console.log(element.id);
       const feature = document.createElement('div');
       feature.classList.add('col-md-4', 'mb-5');
       feature.innerHTML = `
@@ -37,9 +38,21 @@ const getAllData = (data, dataLimit) => {
                     </p>
                 </div>
                 <div class="col-md-5  text-end opacity-50" style="cursor:pointer;">
-                     <i
-                        class="fa-solid fa-arrow-right-long rounded-circle text-white p-2 bg-primary fs-3"
-                    ></i>
+
+                <button
+                type="button"
+                class="btn btn-primary rounded-circle text-white bg-primary fs-3"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+                onclick="featureDetails(${element.id})"
+              >
+              <i
+              class="fa-solid fa-arrow-right-long "
+          ></i>
+              </button>
+        
+
+                     
                 </div>
               </div>
             </div>
@@ -84,3 +97,18 @@ const preLoader = (loader) => {
 };
 
 loadData(false);
+
+const featureDetails = async (id) => {
+  const url = `https://openapi.programming-hero.com/api/ai/tool/0${id}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  getFeaturesData(data);
+};
+const getFeaturesData = (data) => {
+  addDetailsData(data);
+};
+const addDetailsData = (data) => {
+    
+};
+
+featureDetails(1);
