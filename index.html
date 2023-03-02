@@ -10,6 +10,10 @@
       integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
       crossorigin="anonymous"
     />
+    <script
+      src="https://kit.fontawesome.com/c5b4c35fce.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <!-- header -->
@@ -21,12 +25,23 @@
     </header>
 
     <!-- main -->
-    <main>
-      <div class="container">
-        <div class="row" id="features-container">
-            
-        </div>
-      </div>
+    <main class="container">
+      <section>
+        <div class="row" id="features-container"></div>
+      </section>
+
+      <!-- show more -->
+      <section class="text-center d-none" id="show-more-btn">
+        <button class="btn bg-primary text-white fw-bold" id="show-more">
+          Show More
+        </button>
+      </section>
+      <!-- show less -->
+      <section class="text-center d-none" id="show-less-btn">
+        <button class="btn bg-primary text-white fw-bold" id="show-less">
+          show Less
+        </button>
+      </section>
     </main>
 
     <!-- script file  -->
