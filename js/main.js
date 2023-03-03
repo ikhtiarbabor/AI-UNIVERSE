@@ -16,7 +16,7 @@ const getAllData = (data, dataLimit) => {
       feature.classList.add('col-md-4', 'mb-5');
       feature.innerHTML = `
             <div class="card">
-              <div style="height: 18vw;" class="p-2 rounded">
+              <div  class="p-2 rounded">
                 <img src="${element.image}" class="card-img-top p-3 rounded" alt="..."/>
               </div>
               <div class="card-body">
@@ -93,14 +93,14 @@ const preLoader = (loader) => {
 };
 
 loadData(false);
-
+// modal
 const featureDetails = async (id) => {
   const convertInt = parseInt(id);
   const ckDown = (id) => (convertInt >= 10 ? convertInt : id);
   const url = `https://openapi.programming-hero.com/api/ai/tool/${ckDown(id)}`;
   const res = await fetch(url);
   const data = await res.json();
-  getFeaturesData(data);
+  getFeaturesData(data.data);
 };
 const getFeaturesData = (data) => {
   addDetailsData(data);
@@ -108,20 +108,104 @@ const getFeaturesData = (data) => {
 const addDetailsData = (data) => {
   const detailsContainer = document.getElementById('details-container');
   detailsContainer.innerHTML = `
-   <div class="col-md-6"></div>
-   <div class="col-md-6">
-     <div class="card" style="width: 18rem">
-       <img src="${data.data.image_link[0]}" class="card-img-top" alt="..." />
-       <div class="card-body">
-         <h5 class="card-title">Card title</h5>
-         <p class="card-text">
-           Some quick example text to build on the card title and
-           make up the bulk of the card's content.
+   <div class="col-md-6 px-4">
+      <div class="description">
+        <h4>${data.description}</h4>
+      </div>
+      <div class="row  my-3 justify-content-around">
+        <div class="col-md-3 rounded text-white bg-primary opacity-75 pt-1 text-center">
+          <span>${modalCost(data?.pricing[0]?.price, data?.pricing)}</span>
+          <span>${modalCost(data?.pricing[0]?.plan, data?.pricing)}</span>
+        </div>
+        <div class="col-md-3 rounded text-white bg-primary opacity-75 pt-1 text-center">
+          <span>${modalCost(data?.pricing[1]?.price, data?.pricing)}</span>
+          <span>${data?.pricing[1]?.plan}</span>
+        </div>
+        <div class="col-md-3 rounded text-white bg-primary opacity-75 pt-1 text-center">
+          <span>${data?.pricing[2]?.price}</span>
+          <span>${data?.pricing[2]?.plan}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+        <p class="fs-4">Features</p>
+          <ul>
+            <li style="font-size:14px;">${data.features['1'].feature_name}</li>
+            <li style="font-size:14px;">${data.features['2'].feature_name}</li>
+            <li style="font-size:14px;">${data.features['3'].feature_name}</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+        <p class="fs-4">Integrations</p>
+        <ul>
+            <li style="font-size:14px;">${integrations(
+              undefined,
+              undefined,
+              data.integrations[0],
+              data.integrations[0]
+            )}</li>
+            <li style="font-size:14px;">${integrations(
+              undefined,
+              undefined,
+              data.integrations[1],
+              data.integrations[1]
+            )}</li>
+            <li style="font-size:14px;">${integrations(
+              undefined,
+              undefined,
+              data.integrations[2],
+              data.integrations[2]
+            )}</li>
+          </ul>        
+        </div>
+      </div>
+    </div>  
+
+
+
+   
+   
+   </div>
+   <div class="col-md-6 px-4 row">
+     
+       <img src="${data.image_link[0]}" class="card-img-top" alt="..." />
+       <div class="card-body text-bottom align-self-center">
+         <h6 class="card-title fs-4">${data.input_output_examples[0].input}</h6>
+         <p class="card-text mt-3">
+         ${inputOutput(data.input_output_examples[0].output)}
          </p>
-       </div>
+       
      </div>
    </div>
    `;
+  console.log(data.input_output_examples[0].output);
+  function modalCost(data) {
+    if (data === 'No cost' || data === '0') {
+      return 'Free of Cost/';
+    } else {
+      return data;
+    }
+  }
 };
-
+function integrations(integrations1, integrations2, integrations3, mainData) {
+  if (
+    integrations1 === undefined &&
+    integrations2 === undefined &&
+    integrations3 === undefined
+  ) {
+    return 'No Data Found';
+  } else {
+    return mainData;
+  }
+}
+function inputOutput(givenData) {
+  if (
+    givenData ===
+    "function reverseString(str) {\n return str.split('').reverse().join('');\n}"
+  ) {
+    return 'No! Not Yet! Take a break!!!';
+  } else {
+    return givenData;
+  }
+}
 featureDetails('01');
