@@ -12,7 +12,6 @@ const getAllData = (data, dataLimit) => {
 
   const eachData = (data) => {
     data.forEach((element) => {
-      console.log(element.id);
       const feature = document.createElement('div');
       feature.classList.add('col-md-4', 'mb-5');
       feature.innerHTML = `
@@ -37,26 +36,23 @@ const getAllData = (data, dataLimit) => {
                         <span>${element.published_in}</span>
                     </p>
                 </div>
-                <div class="col-md-5  text-end opacity-50" style="cursor:pointer;">
-
+                <div class="col-md-5  text-end opacity-50 details-button" style="cursor:pointer;">
                 <button
                 type="button"
-                class="btn btn-primary rounded-circle text-white bg-primary fs-3"
+                class="btn btn-primary rounded-circle text-white bg-primary fs-3 "
                 data-bs-toggle="modal"
                 data-bs-target="#exampleModal"
-                onclick="featureDetails(${element.id})"
+                onclick="featureDetails('0'+${element.id})"
               >
-              <i
-              class="fa-solid fa-arrow-right-long "
-          ></i>
+               <i
+                class="fa-solid fa-arrow-right-long "
+                ></i>
               </button>
-        
-
-                     
                 </div>
               </div>
             </div>
         `;
+
       featuresContainer.appendChild(feature);
       preLoader(false);
     });
@@ -99,7 +95,9 @@ const preLoader = (loader) => {
 loadData(false);
 
 const featureDetails = async (id) => {
-  const url = `https://openapi.programming-hero.com/api/ai/tool/0${id}`;
+  const convertInt = parseInt(id);
+  const ckDown = (id) => (convertInt >= 10 ? convertInt : id);
+  const url = `https://openapi.programming-hero.com/api/ai/tool/${ckDown(id)}`;
   const res = await fetch(url);
   const data = await res.json();
   getFeaturesData(data);
@@ -108,7 +106,22 @@ const getFeaturesData = (data) => {
   addDetailsData(data);
 };
 const addDetailsData = (data) => {
-    
+  const detailsContainer = document.getElementById('details-container');
+  detailsContainer.innerHTML = `
+   <div class="col-md-6"></div>
+   <div class="col-md-6">
+     <div class="card" style="width: 18rem">
+       <img src="${data.data.image_link[0]}" class="card-img-top" alt="..." />
+       <div class="card-body">
+         <h5 class="card-title">Card title</h5>
+         <p class="card-text">
+           Some quick example text to build on the card title and
+           make up the bulk of the card's content.
+         </p>
+       </div>
+     </div>
+   </div>
+   `;
 };
 
-featureDetails(1);
+featureDetails('01');
