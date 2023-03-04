@@ -6,7 +6,6 @@ const loadData = async (dataLimit) => {
   getAllData(data.data.tools, dataLimit);
 };
 const getAllData = (data, dataLimit) => {
-  preLoader(false);
   const featuresContainer = document.getElementById('features-container');
   const showMoreButton = document.getElementById('show-more-btn');
 
@@ -84,11 +83,17 @@ document.getElementById('show-less').addEventListener('click', function () {
 });
 // Pre Loader
 const preLoader = (loader) => {
+  const shoButton = document.getElementById('show-more-btn');
+  const showLess = document.getElementById('show-less');
   const preloader = document.getElementById('preloader');
   if (loader === true) {
     preloader.classList.remove('d-none');
+    shoButton.classList.add('d-none');
+    showLess.classList.add('d-none');
   } else {
     preloader.classList.add('d-none');
+    shoButton.classList.remove('d-none');
+    showLess.classList.remove('d-none');
   }
 };
 
@@ -160,21 +165,20 @@ const addDetailsData = (data) => {
         </div>
       </div>
     </div>  
-
-
-
-   
-   
    </div>
    <div class="col-md-6 px-4 row">
-     
-       <img src="${data.image_link[0]}" class="card-img-top" alt="..." />
+       <div class="text-end">
+  }</span>
+            <img src="${
+              data.image_link[0]
+            }" class="card-img-top" alt="..." style=""/>
+            
+        </div>
        <div class="card-body text-bottom align-self-center">
          <h6 class="card-title fs-4">${data.input_output_examples[0].input}</h6>
          <p class="card-text mt-3">
          ${inputOutput(data.input_output_examples[0].output)}
          </p>
-       
      </div>
    </div>
    `;
@@ -208,4 +212,4 @@ function inputOutput(givenData) {
     return givenData;
   }
 }
-featureDetails('01');
+featureDetails();
