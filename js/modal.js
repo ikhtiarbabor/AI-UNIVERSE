@@ -105,11 +105,10 @@ const addDetailsData = (data) => {
       </div>  
      </div>
      <div class="col-md-6 px-4 row">
-         <div class="text-end"><i style="display:${
-           data.accuracy.score == null ? 'none' : 'inline-block'
-         }">
+         <div class="text-end">
+         <i style="display:${data.accuracy.score == null ? 'none' : 'inline-block'}">
          <span id="accuracy-btn" class="text-white p-2 rounded" style="position:relative; right:5px; background:#f97316; top:40px; }" >${
-           data.accuracy == null ? '' : data.accuracy.score * 100 + '% accuracy'
+           data.accuracy.score == null ? '' : data.accuracy.score * 100 + '% accuracy'
          }</span>
          </i>
          

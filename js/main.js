@@ -5,7 +5,7 @@ const loadData = async (dataLimit) => {
   const data = await res.json();
   getAllData(data.data.tools, dataLimit);
 };
-const getAllData = (data, dataLimit) => {
+const getAllData = (data, dataLimit =false) => {
   const featuresContainer = document.getElementById('features-container');
   const showMoreButton = document.getElementById('show-more-btn');
 
