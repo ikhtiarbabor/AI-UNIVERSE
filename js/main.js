@@ -8,6 +8,23 @@ const loadData = async (dataLimit) => {
 const getAllData = (data, dataLimit) => {
   const featuresContainer = document.getElementById('features-container');
   const showMoreButton = document.getElementById('show-more-btn');
+  // sorting
+  const sorting = (a, b) => {
+    const postDate = new Date(b.published_in);
+    const preDate = new Date(a.published_in);
+    if (preDate > postDate) {
+      return 1;
+    } else if (preDate < postDate) {
+      return -1;
+    } else {
+      return 0;
+    }
+  };
+  document
+    .getElementById('sort-by-date')
+    .addEventListener('click', function () {
+      getAllData();
+    });
 
   const eachData = (data) => {
     data.forEach((element) => {
@@ -105,10 +122,7 @@ const featureDetails = async (id) => {
   const url = `https://openapi.programming-hero.com/api/ai/tool/${ckDown(id)}`;
   const res = await fetch(url);
   const data = await res.json();
-  getFeaturesData(data.data);
-};
-const getFeaturesData = (data) => {
-  addDetailsData(data);
+  addDetailsData(data.data);
 };
 const addDetailsData = (data) => {
   const detailsContainer = document.getElementById('details-container');
@@ -119,48 +133,90 @@ const addDetailsData = (data) => {
       </div>
       <div class="row  my-3 justify-content-around">
         <div class="col-md-3 rounded text-white bg-primary opacity-75 pt-1 text-center">
-          <span>${modalCost(data?.pricing[0]?.price, data?.pricing)}</span>
-          <span>${modalCost(data?.pricing[0]?.plan, data?.pricing)}</span>
+          <span>${
+            data.pricing == null
+              ? 'Free of Cost/'
+              : modalCost(data.pricing[0].price)
+          }</span>
+          <span>${
+            data.pricing == null ? 'Basic' : modalCost(data.pricing[0].plan)
+          }</span>
         </div>
         <div class="col-md-3 rounded text-white bg-primary opacity-75 pt-1 text-center">
-          <span>${modalCost(data?.pricing[1]?.price, data?.pricing)}</span>
-          <span>${data?.pricing[1]?.plan}</span>
+          <span>${
+            data.pricing == null
+              ? 'Free of Cost/'
+              : modalCost(data.pricing[1].price)
+          }</span>
+          <span>${
+            data.pricing == null ? 'Pro' : modalCost(data.pricing[1].plan)
+          }</span>
         </div>
         <div class="col-md-3 rounded text-white bg-primary opacity-75 pt-1 text-center">
-          <span>${data?.pricing[2]?.price}</span>
-          <span>${data?.pricing[2]?.plan}</span>
+          <span>${
+            data.pricing == null
+              ? 'Contact us for pricing Enterprise'
+              : modalCost(data.pricing[2].price)
+          }</span>
+          <span>${
+            data.pricing == null ? '' : modalCost(data.pricing[2].plan)
+          }</span>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6">
         <p class="fs-4">Features</p>
           <ul>
-            <li style="font-size:14px;">${data.features['1'].feature_name}</li>
-            <li style="font-size:14px;">${data.features['2'].feature_name}</li>
-            <li style="font-size:14px;">${data.features['3'].feature_name}</li>
+            <li style="font-size:14px;">${
+              data.features == null
+                ? 'No data Found'
+                : data.features['1'].feature_name
+            }</li>
+            <li style="font-size:14px;">${
+              data.features == null
+                ? 'No data Found'
+                : data.features['2'].feature_name
+            }</li>
+            <li style="font-size:14px;">${
+              data.features == null
+                ? 'No data Found'
+                : data.features['3'].feature_name
+            }</li>
           </ul>
         </div>
         <div class="col-md-6">
         <p class="fs-4">Integrations</p>
         <ul>
-            <li style="font-size:14px;">${integrations(
-              undefined,
-              undefined,
-              data.integrations[0],
-              data.integrations[0]
-            )}</li>
-            <li style="font-size:14px;">${integrations(
-              undefined,
-              undefined,
-              data.integrations[1],
-              data.integrations[1]
-            )}</li>
-            <li style="font-size:14px;">${integrations(
-              undefined,
-              undefined,
-              data.integrations[2],
-              data.integrations[2]
-            )}</li>
+            <li style="font-size:14px;">${
+              data.integrations == null
+                ? 'No Data Found'
+                : integrations(
+                    undefined,
+                    undefined,
+                    data.integrations[0],
+                    data.integrations[0]
+                  )
+            }</li>
+            <li style="font-size:14px;">${
+              data.integrations == null
+                ? 'No Data Found'
+                : integrations(
+                    undefined,
+                    undefined,
+                    data.integrations[1],
+                    data.integrations[1]
+                  )
+            }</li>
+            <li style="font-size:14px;">${
+              data.integrations == null
+                ? 'No Data Found'
+                : integrations(
+                    undefined,
+                    undefined,
+                    data.integrations[2],
+                    data.integrations[2]
+                  )
+            }</li>
           </ul>        
         </div>
       </div>
@@ -168,21 +224,33 @@ const addDetailsData = (data) => {
    </div>
    <div class="col-md-6 px-4 row">
        <div class="text-end">
+       <span style="position:relative; right:5px; background:#f97316; top:40px; display:${
+         data.accuracy != null ? 'inline-block' : 'none'
+       }" class="text-white p-2 rounded">${
+    data.accuracy == null ? '' : data.accuracy.score * 100 + '% accuracy'
   }</span>
             <img src="${
-              data.image_link[0]
+              data.image_link == null ? 'IMAGE' : data.image_link[0]
             }" class="card-img-top" alt="..." style=""/>
             
         </div>
        <div class="card-body text-bottom align-self-center">
-         <h6 class="card-title fs-4">${data.input_output_examples[0].input}</h6>
+         <h6 class="card-title fs-4">${
+           data.input_output_examples == null
+             ? 'No! Not Yet! Take a break!!!'
+             : data.input_output_examples[0].input
+         }</h6>
          <p class="card-text mt-3">
-         ${inputOutput(data.input_output_examples[0].output)}
+         ${inputOutput(
+           data.input_output_examples == null
+             ? ''
+             : data.input_output_examples[0].output
+         )}
          </p>
      </div>
    </div>
    `;
-  console.log(data.input_output_examples[0].output);
+
   function modalCost(data) {
     if (data === 'No cost' || data === '0') {
       return 'Free of Cost/';
@@ -212,4 +280,5 @@ function inputOutput(givenData) {
     return givenData;
   }
 }
+
 featureDetails();
